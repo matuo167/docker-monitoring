@@ -12,11 +12,7 @@ Docker Composeで起動できる、Flask製Web APIの監視基盤です。Nginx�
 4. PrometheusがFlask、cAdvisor、自身を定期的にスクレイプする
 5. GrafanaがPrometheusのデータを読み取り、ダッシュボードへ表示する
 
-## 2. 制作背景
-
-インフラエンジニアに興味があり、Webサービスが実際にどのように監視されているのかを理解するために制作しました。Docker、Prometheus、Grafanaを組み合わせ、サービスを構築するだけではなく、稼働状況やアクセス状況を可視化するところまで経験することを目的としています。
-
-## 3. システム構成図
+## 2. システム構成図
 
 ```mermaid
 flowchart TD
@@ -32,7 +28,7 @@ flowchart TD
 
 ユーザー向けのAPIアクセスはNginx経由です。一方、PrometheusのスクレイプはComposeネットワーク内で`app:8000/metrics`と`cadvisor:8080/metrics`へ直接行います。GrafanaはブラウザからPrometheusへ直接アクセスするのではなく、GrafanaコンテナがPrometheusをデータソースとして読み取ります。
 
-## 4. 使用技術
+## 3. 使用技術
 
 | 技術 | このプロジェクトでの役割 |
 | --- | --- |
@@ -45,7 +41,7 @@ flowchart TD
 | cAdvisor | DockerコンテナのCPU使用率・メモリ使用量などを収集 |
 | Nginx | 外部公開の入口とFlaskへのリバースプロキシ |
 
-## 5. 起動方法
+## 4. 起動方法
 
 ### 前提
 
@@ -70,7 +66,7 @@ docker compose down
 
 コンテナを停止してもPrometheusとGrafanaの名前付きボリュームは残るため、ダッシュボード設定や時系列データを再利用できます。初期状態からやり直す場合は、内容を確認したうえで`docker compose down -v`を実行してください。
 
-## 6. アクセス先
+## 5. アクセス先
 
 | 対象 | URL | 用途 |
 | --- | --- | --- |
@@ -84,7 +80,7 @@ docker compose down
 
 Grafanaのログイン情報は、`.env`に設定した`GRAFANA_ADMIN_USER`と`GRAFANA_ADMIN_PASSWORD`です。
 
-## 7. 監視している項目
+## 6. 監視している項目
 
 ### Flaskアプリケーション
 
@@ -108,7 +104,7 @@ cAdvisorを通じて次のメトリクスを取得します。
 
 Prometheusの`Status > Targets`では、`flask-app`、`cadvisor`、`prometheus`の3つが`UP`になります。`UP`は、Prometheusが対象の`/metrics`エンドポイントから正常にデータを取得できたことを意味します。
 
-## 8. Grafanaダッシュボード
+## 7. Grafanaダッシュボード
 
 `grafana/dashboards/web-service-monitoring.json`をProvisioningしているため、初回起動時から「Web Service Monitoring」ダッシュボードを利用できます。データソースも`grafana/provisioning/datasources/prometheus.yml`で自動登録されます。
 
@@ -125,7 +121,7 @@ Prometheusの`Status > Targets`では、`flask-app`、`cadvisor`、`prometheus`�
 
 ![Grafana dashboard screenshot](docs/images/grafana-dashboard.png)
 
-## 9. 動作確認方法
+## 8. 動作確認方法
 
 ### 個別に確認
 
