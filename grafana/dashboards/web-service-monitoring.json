@@ -1,0 +1,66 @@
+{
+  "annotations": {"list": []},
+  "editable": true,
+  "graphTooltip": 1,
+  "panels": [
+    {
+      "title": "HTTP requests per minute",
+      "type": "timeseries",
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0},
+      "targets": [{"expr": "sum(rate(http_requests_total{endpoint!=\"/metrics\"}[1m])) * 60", "legendFormat": "requests/min", "refId": "A"}],
+      "fieldConfig": {"defaults": {"unit": "reqpm", "min": 0}, "overrides": []}
+    },
+    {
+      "title": "Requests by HTTP status",
+      "type": "timeseries",
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0},
+      "targets": [{"expr": "sum by (status) (rate(http_requests_total{endpoint!=\"/metrics\"}[1m])) * 60", "legendFormat": "status {{status}}", "refId": "A"}],
+      "fieldConfig": {"defaults": {"unit": "reqpm", "min": 0}, "overrides": []}
+    },
+    {
+      "title": "API response time (p95)",
+      "type": "timeseries",
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8},
+      "targets": [{"expr": "histogram_quantile(0.95, sum by (le, endpoint) (rate(http_request_duration_seconds_bucket{endpoint!=\"/metrics\"}[5m])))", "legendFormat": "{{endpoint}}", "refId": "A"}],
+      "fieldConfig": {"defaults": {"unit": "s", "min": 0}, "overrides": []}
+    },
+    {
+      "title": "HTTP 500 errors per minute",
+      "type": "timeseries",
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8},
+      "targets": [{"expr": "sum(rate(http_requests_total{status=\"500\"}[1m])) * 60", "legendFormat": "HTTP 500", "refId": "A"}],
+      "fieldConfig": {"defaults": {"unit": "reqpm", "min": 0, "color": {"mode": "fixed", "fixedColor": "red"}}, "overrides": []}
+    },
+    {
+      "title": "Container CPU usage",
+      "type": "timeseries",
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 16},
+      "targets": [{"expr": "sum by (container_label_com_docker_compose_service) (rate(container_cpu_usage_seconds_total{container_label_com_docker_compose_project=\"monitoring-project\",container_label_com_docker_compose_service!=\"\"}[1m])) * 100", "legendFormat": "{{container_label_com_docker_compose_service}}", "refId": "A"}],
+      "fieldConfig": {"defaults": {"unit": "percent", "min": 0}, "overrides": []}
+    },
+    {
+      "title": "Container memory usage",
+      "type": "timeseries",
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 16},
+      "targets": [{"expr": "sum by (container_label_com_docker_compose_service) (container_memory_working_set_bytes{container_label_com_docker_compose_project=\"monitoring-project\",container_label_com_docker_compose_service!=\"\"}) / 1024 / 1024", "legendFormat": "{{container_label_com_docker_compose_service}}", "refId": "A"}],
+      "fieldConfig": {"defaults": {"unit": "decmbytes", "min": 0}, "overrides": []}
+    }
+  ],
+  "refresh": "5s",
+  "schemaVersion": 39,
+  "style": "dark",
+  "tags": ["docker", "prometheus", "grafana", "flask"],
+  "templating": {"list": []},
+  "time": {"from": "now-15m", "to": "now"},
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Web Service Monitoring",
+  "uid": "web-service-monitoring",
+  "version": 2
+}

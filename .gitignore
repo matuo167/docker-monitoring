@@ -1,0 +1,13 @@
+.env
+__pycache__/
+*.py[cod]
+.DS_Store
+*.log
+
+# Local Grafana/Prometheus data if bind mounts are used later.
+grafana/data/
+prometheus/data/
+
+# Optional local screenshots and temporary files.
+docs/images/*.png
+docs/images/*.jpg
