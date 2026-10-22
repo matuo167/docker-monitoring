@@ -117,8 +117,6 @@ Prometheusの`Status > Targets`では、`flask-app`、`cadvisor`、`prometheus`�
 | Container CPU usage | cAdvisorが収集したコンテナCPU使用率 |
 | Container memory usage | cAdvisorが収集したコンテナメモリ使用量 |
 
-スクリーンショットを追加する場合は、`docs/images/grafana-dashboard.png`に配置してください。
-
 ![Grafana dashboard screenshot](docs/images/grafana-dashboard.png)
 
 ## 8. 動作確認方法
